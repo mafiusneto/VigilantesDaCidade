@@ -21,7 +21,7 @@ import android.graphics.Bitmap
 
 class Ac_Denunciar : AppCompatActivity() {
 
-    val TIRAR_FOTO = 1;//1020394857;
+    val TIRAR_FOTO = 1//1020394857;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +72,7 @@ class Ac_Denunciar : AppCompatActivity() {
 
                 requestPermissions(this@Ac_Denunciar,
                         arrayOf(Manifest.permission.CALL_PHONE),
-                        0);
+                        0)
 
             }else{
                 callNumber()

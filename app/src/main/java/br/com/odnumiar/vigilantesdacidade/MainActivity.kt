@@ -3,10 +3,9 @@ package br.com.odnumiar.vigilantesdacidade
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
+import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.view.View
@@ -22,11 +21,13 @@ import android.view.MenuItem
 import android.widget.Toast
 import br.com.odnumiar.vigilantesdacidade.views.Ac_Denunciar
 import br.com.odnumiar.vigilantesdacidade.views.Ac_Lista_Denuncias
+import br.com.odnumiar.vigilantesdacidade.views.LoginActivity
 import br.com.odnumiar.vigilantesdacidade.views.search_problems
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val REQUEST_IMAGE_CAPTURE = 1
+    val key = "AUTh"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
+
+
+        if (Get_SP() == ""){
+            chamaIntent(4)
+            finish()
+        }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
     override fun onBackPressed() {
@@ -105,7 +117,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun chamaIntent(x:Int){
-        var acess = false;
+        var acess = false
         when(x){
             1 -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -115,7 +127,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         ActivityCompat.requestPermissions(this@MainActivity,
                                 arrayOf(Manifest.permission.CAMERA,
                                         Manifest.permission.READ_EXTERNAL_STORAGE),
-                                0);
+                                0)
 
                     }else{
                         acess = true
@@ -137,6 +149,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(this,Ac_Lista_Denuncias::class.java)
                 startActivity(intent)
                 //Toast.makeText(this@MainActivity,"opc 2",Toast.LENGTH_SHORT).show()
+            }
+            4 -> {
+                val intent = Intent(this,LoginActivity::class.java)
+                startActivity(intent)
+                Toast.makeText(this@MainActivity,"opc 4",Toast.LENGTH_SHORT).show()
             }
             else -> {
                 Toast.makeText(this@MainActivity,"opc não encontrada: ${x}",Toast.LENGTH_SHORT).show()
@@ -161,6 +178,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         */
 
+    }
+
+    fun Get_SP ():String {
+        var pref = PreferenceManager.getDefaultSharedPreferences(this)
+        var value = pref.getString(key,"") //NOTHING!!!
+
+        return  value;
+        //Toast.makeText(this@MainActivity, value, Toast.LENGTH_SHORT).show()
+    }
+
+    fun Save_SP(v:View) {
+        var pref = PreferenceManager.getDefaultSharedPreferences(this)
+        var editor = pref.edit()
+
+        //save infos
+        editor.putString(key,"")
+        editor.commit()
+
+        Toast.makeText(this@MainActivity, "SAVE OK", Toast.LENGTH_SHORT).show()
     }
 
 }

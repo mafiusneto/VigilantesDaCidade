@@ -21,24 +21,24 @@ class search_problems : AppCompatActivity() {
                 ArrayAdapter.createFromResource(
                         this,
                         R.array.states,
-                        android.R.layout.simple_spinner_item);
+                        android.R.layout.simple_spinner_item)
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spStates.adapter = adapter;
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spStates.adapter = adapter
 
         spStates.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 Toast.makeText(this@search_problems,
-                        "Selecione", Toast.LENGTH_LONG).show();
+                        "Selecione", Toast.LENGTH_LONG).show()
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 Toast.makeText(this@search_problems,
-                        "${spStates.selectedItem.toString()}", Toast.LENGTH_LONG).show();
+                        "${spStates.selectedItem}", Toast.LENGTH_LONG).show()
             }
         }
     }
 
     fun TesteClick(v: View){
-        Toast.makeText(this@search_problems,"Teste msg:${spStates.selectedItem.toString()}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@search_problems,"Teste msg:${spStates.selectedItem}", Toast.LENGTH_SHORT).show()
     }
 }
