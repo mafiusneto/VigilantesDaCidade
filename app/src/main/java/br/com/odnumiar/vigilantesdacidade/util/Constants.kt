@@ -6,7 +6,8 @@ package br.com.odnumiar.vigilantesdacidade.util
 class Constants {
 
     companion object {
-        val URL_LOGIN_OK: String = "https://jsonplaceholder.typicode.com/"
-        val URL_LOGIN_ERRO: String = "https://jsonplaceholder.typicode.com/"
+        val URL_LOGIN_OK: String = "https://api.myjson.com/bins/ktj2v"   //"https://jsonplaceholder.typicode.com/"
+        val URL_LOGIN_ERRO: String = "https://api.myjson.com/bins/leyon"
+        val KEY_LOGIN = "AUTh_"
     }
 }

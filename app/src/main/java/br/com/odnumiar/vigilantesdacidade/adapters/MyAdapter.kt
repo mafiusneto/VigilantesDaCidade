@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.odnumiar.vigilantesdacidade.R
-import com.example.neto.aula1_1.models.Evento
+import br.com.odnumiar.vigilantesdacidade.models.Evento
 import kotlinx.android.synthetic.main.itemlist_eventos.view.*
 
 /**

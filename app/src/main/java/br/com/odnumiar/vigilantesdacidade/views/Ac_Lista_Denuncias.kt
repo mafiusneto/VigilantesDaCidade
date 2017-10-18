@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 
 import br.com.odnumiar.vigilantesdacidade.R
+import br.com.odnumiar.vigilantesdacidade.models.Evento
 import com.example.neto.aula1_1.adapters.MyAdapter
-import com.example.neto.aula1_1.models.Evento
 import kotlinx.android.synthetic.main.activity_ac__lista__denuncias.*
 
 class Ac_Lista_Denuncias : AppCompatActivity() {

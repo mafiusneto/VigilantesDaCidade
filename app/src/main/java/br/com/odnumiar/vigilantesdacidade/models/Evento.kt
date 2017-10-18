@@ -1,9 +1,9 @@
-package com.example.neto.aula1_1.models
-
-import android.view.View
-import java.lang.reflect.Constructor
+package br.com.odnumiar.vigilantesdacidade.models
 
 /**
- * Created by Neto on 29/08/2017.
+ * Created by Neto on 18/10/2017.
  */
-class Evento (val title:String, val desc:String)
+class Evento(
+        var title :String,
+        var desc :String) {
+}
