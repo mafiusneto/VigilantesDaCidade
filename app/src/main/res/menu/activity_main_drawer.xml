@@ -9,7 +9,7 @@
         <item
             android:id="@+id/nav_src_denunciations"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Busca denúncias"/>
+            android:title="Busca denúncias" />
         <item
             android:id="@+id/nav_my_denunciations"
             android:icon="@drawable/ic_menu_slideshow"

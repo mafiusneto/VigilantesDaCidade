@@ -3,11 +3,11 @@ package br.com.odnumiar.vigilantesdacidade.views
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-
-import br.com.odnumiar.vigilantesdacidade.R
 import android.app.ProgressDialog
+import android.content.Intent
 import android.preference.PreferenceManager
 import android.widget.*
+import br.com.odnumiar.vigilantesdacidade.R
 import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
 import br.com.odnumiar.vigilantesdacidade.models.Login
@@ -46,12 +46,14 @@ class LoginActivity : AppCompatActivity(){
         }else{
             var login = Login(etEmail.text.toString(),
                     etPassword.text.toString(),
+                    "",
                     "")
 
             login.pass =  login.pass.hashCode().toString()
 
             var conn = ConnectionService()
-            conn.requestLogin2(login, this,
+
+            conn.requestLogin2(login, this@LoginActivity,
                     object : AsyncCallback() {
                         override fun onSuccess(result:String){
                             Toast.makeText(this@LoginActivity,"resulto:"+result,Toast.LENGTH_SHORT).show()
@@ -85,7 +87,10 @@ class LoginActivity : AppCompatActivity(){
     }
 
     fun fu_cadastro(v:View){
-        Toast.makeText(this@LoginActivity,"Cadastro!",Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, CadastroActivity::class.java)
+        startActivity(intent)
+        finish()
+        //Toast.makeText(this@LoginActivity,"Cadastro!",Toast.LENGTH_SHORT).show()
     }
 
     fun showProgressDialog() {

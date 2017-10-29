@@ -5,4 +5,5 @@ package br.com.odnumiar.vigilantesdacidade.models
  */
 class Login(var user:String,
             var pass :String,
-            var token :String) {}
+            var token :String,
+            var name :String) {}

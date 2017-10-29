@@ -10,4 +10,7 @@ open class AsyncCallback {
     open fun onFailure(result:String) {
 
     }
+    open fun onSuccessLogin(result:User) {
+
+    }
 }

@@ -31,17 +31,17 @@
             android:orientation="vertical">
 
             <ImageView
-                android:maxHeight="100dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/ic_launcher"/>
+                android:maxHeight="100dp"
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
                 android:gravity="center"
+                android:text="@string/app_name"
                 android:textStyle="bold" />
 
             <android.support.design.widget.TextInputLayout
@@ -81,7 +81,7 @@
                 android:id="@+id/ckbManterConectado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Manter conectado"/>
+                android:text="Manter conectado" />
 
             <Button
                 android:id="@+id/btLogar"
@@ -89,16 +89,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:onClick="fu_logar"
                 android:text="@string/action_sign_in"
-                android:textStyle="bold"
-                android:onClick="fu_logar"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/novo_cadastro"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:onClick="fu_cadastro"/>
+                android:onClick="fu_cadastro"
+                android:text="@string/novo_cadastro"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>

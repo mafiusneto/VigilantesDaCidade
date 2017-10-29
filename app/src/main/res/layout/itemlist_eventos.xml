@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_margin="8dp"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
 
         </LinearLayout>
+
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="17sp"
-            android:text="EXAMPLE"/>
+            android:text="EXAMPLE"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="Description"/>
+            android:text="Description"
+            android:textSize="14sp" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -6,4 +6,5 @@ package br.com.odnumiar.vigilantesdacidade.models
 class User (var name:String,
             var pass:String,
             var email:String,
-            var token:String){}
+            var token:String,
+            var id:Int){}

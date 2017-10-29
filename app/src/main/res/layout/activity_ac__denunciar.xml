@@ -11,13 +11,13 @@
         android:id="@+id/ivPhoto"
         android:layout_width="match_parent"
         android:layout_height="413dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="View for displaying image"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@android:color/darker_gray"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
-        app:layout_constraintHorizontal_bias="0.513" />
+        app:srcCompat="@android:color/darker_gray" />
 
     <Button
         android:id="@+id/btCamera"
@@ -25,11 +25,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
+        android:onClick="tirarFoto"
         android:text="start camera app"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivPhoto"
-        android:onClick="tirarFoto"/>
+        app:layout_constraintTop_toBottomOf="@id/ivPhoto" />
 
 </android.support.constraint.ConstraintLayout>

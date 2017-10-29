@@ -43,6 +43,7 @@
         <activity android:name=".views.search_problems" />
         <activity android:name=".views.Ac_Denunciar" />
         <activity android:name=".views.Ac_Lista_Denuncias" />
+        <activity android:name=".views.CadastroActivity"></activity>
     </application>
 
 </manifest>
