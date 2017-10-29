@@ -43,10 +43,6 @@
         <activity android:name=".views.search_problems" />
         <activity android:name=".views.Ac_Denunciar" />
         <activity android:name=".views.Ac_Lista_Denuncias" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name="dominando.android.http.Ac_Http"></activity>
     </application>
 
 </manifest>

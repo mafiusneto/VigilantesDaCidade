@@ -19,15 +19,13 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import br.com.odnumiar.vigilantesdacidade.views.Ac_Denunciar
-import br.com.odnumiar.vigilantesdacidade.views.Ac_Lista_Denuncias
-import br.com.odnumiar.vigilantesdacidade.views.LoginActivity
-import br.com.odnumiar.vigilantesdacidade.views.search_problems
+import br.com.odnumiar.vigilantesdacidade.util.Constants
+import br.com.odnumiar.vigilantesdacidade.views.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val REQUEST_IMAGE_CAPTURE = 1
-    val key = "AUTh"
+    //val key = "AUTh"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +47,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
-
 
         if (Get_SP() == ""){
             chamaIntent(4)
@@ -182,7 +179,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun Get_SP ():String {
         var pref = PreferenceManager.getDefaultSharedPreferences(this)
-        var value = pref.getString(key,"") //NOTHING!!!
+        var value = pref.getString(Constants.KEY_LOGIN,"") //NOTHING!!!
 
         return  value;
         //Toast.makeText(this@MainActivity, value, Toast.LENGTH_SHORT).show()
@@ -193,7 +190,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var editor = pref.edit()
 
         //save infos
-        editor.putString(key,"")
+        editor.putString(Constants.KEY_LOGIN,"")
         editor.commit()
 
         Toast.makeText(this@MainActivity, "SAVE OK", Toast.LENGTH_SHORT).show()

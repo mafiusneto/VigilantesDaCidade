@@ -58,8 +58,7 @@ class LoginActivity : AppCompatActivity(){
         // Set up the login form.
 
         etEmail.setText("netolbv@gmail.com")
-        etPassword.setText("123")
-
+        etPassword.setText("a123")
     }
 
     fun fu_logar(v:View){
@@ -74,22 +73,27 @@ class LoginActivity : AppCompatActivity(){
                     etPassword.text.toString(),
                     "")
 
+            login.pass =  login.pass.hashCode().toString()
+
             var conn = ConnectionService()
-            conn.requestLogin(login, this,
+            conn.requestLogin2(login, this,
                     object : AsyncCallback() {
-                        override fun onSuccess(result:Login){
-                            Toast.makeText(this@LoginActivity,"Token:"+login.token,Toast.LENGTH_SHORT).show()
-                            SetPrefToken(login.token)
+                        override fun onSuccess(result:String){
+                            Toast.makeText(this@LoginActivity,"resulto:"+result,Toast.LENGTH_SHORT).show()
+                            //SetPrefToken(login.token)
                             //showResult(result)
                             hideProgressDialog()
                         }
 
-                        override fun onFailure(result: Login) {
-                            Toast.makeText(this@LoginActivity,"Autenticação inválida",Toast.LENGTH_SHORT).show()
+                        override fun onFailure(result: String) {
+                            Toast.makeText(this@LoginActivity,"Autenticação inválida:"+result,Toast.LENGTH_SHORT).show()
                             //showResult(result)
                             hideProgressDialog()
                         }
                     })
+
+            hideProgressDialog()
+
 
         }
 

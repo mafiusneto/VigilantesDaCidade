@@ -17,17 +17,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ConnectionService {
 
     fun requestLogin(login:Login, context: Context, callback: AsyncCallback) {
-        var URL :String = ""
-        if (login.user == "netolbv@gmail.com" && login.pass == "123"){ //teste login sucesso
-            URL = Constants.URL_LOGIN_OK
-
-        }else{  //teste login invalido
-            URL = Constants.URL_LOGIN_ERRO
-
-        }
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(URL)
+                .baseUrl(Constants.URL_ROOt)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -42,7 +34,7 @@ class ConnectionService {
 
                         val result :Login =  response.body() as Login //é um Post
 
-                        var str  =      result
+                        var str :String  =      result.token
 
                                         /*
                                         "token:${result?.token}\n" +
@@ -67,6 +59,63 @@ class ConnectionService {
         })
     }
 
+
+
+    fun requestLogin2(login:Login, context: Context, callback: AsyncCallback) {
+        var URL :String = ""
+        if (login.pass == "123"){ //teste login sucesso
+            URL = Constants.URL_ROOt// + Constants.LOGIN_OK  //"https://api.myjson.com/bins/ktj2v"
+
+        }else{  //teste login invalido
+            URL = Constants.URL_ROOt// + Constants.LOGIN_ERRO  //"https://api.myjson.com/bins/leyon"
+
+        }
+
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        val service = retrofit.create(SessionConnection::class.java)
+
+        var auth = service.login2(login)
+
+        auth.enqueue(object : Callback<Login> {
+            override fun onResponse(call: Call<Login>, response: Response<Login>?) {
+                response?.let {
+                    response.body()?.let {
+
+                        val result :Login =  response.body() as Login //é um Post
+
+                        var str  =      result.token
+
+                        /*
+                        "token:${result?.token}\n" +
+                        "id:${result?.id}\n" +
+                        "title:${result?.title}\n" +
+                        "body:${result?.body} "
+                        */
+
+                        callback.onSuccess(str)
+
+                    } ?: run {
+                        callback.onFailure("Errrooooooo1")
+                        //mainPresenter.result(context.getString(R.string.error))
+                    }
+                } ?: run {
+                    //mainPresenter.result(context.getString(R.string.error))
+                    callback.onFailure("Errrooooooo2")
+                }
+            }
+
+            override fun onFailure(call: Call<Login>, t: Throwable) {
+                //.result(context.getString(R.string.error))
+
+                callback.onFailure("Errrooooooo3")
+            }
+        })
+    }
     /*
     fun sendNewPost(post:Post, context: Context, callback: AsyncCallback) {
         val retrofit = Retrofit.Builder()
