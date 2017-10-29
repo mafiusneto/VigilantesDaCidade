@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             4 -> {
                 val intent = Intent(this,LoginActivity::class.java)
                 startActivity(intent)
-                Toast.makeText(this@MainActivity,"opc 4",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@MainActivity,"opc 4",Toast.LENGTH_SHORT).show()
             }
             else -> {
                 Toast.makeText(this@MainActivity,"opc não encontrada: ${x}",Toast.LENGTH_SHORT).show()
@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun Get_SP ():String {
-        var pref = PreferenceManager.getDefaultSharedPreferences(this)
+        var pref = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
         var value = pref.getString(Constants.KEY_LOGIN,"") //NOTHING!!!
 
         return  value;
