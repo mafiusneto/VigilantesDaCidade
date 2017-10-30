@@ -3,7 +3,6 @@ package br.com.odnumiar.vigilantesdacidade.mvp
 import android.content.Context
 import android.util.Log
 import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
-import br.com.odnumiar.vigilantesdacidade.models.Login
 import br.com.odnumiar.vigilantesdacidade.models.User
 import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.util.SessionConnection
@@ -23,50 +22,7 @@ class ConnectionService {
         Log.d("DEBUG_VC", "executando construtor de ConnectionService")
     }
 
-    fun requestLogin(login:Login, context: Context, callback: AsyncCallback) {
-
-        val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.URL_ROOt)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-        val service = retrofit.create(SessionConnection::class.java)
-
-        var auth = service.login(login)
-
-        auth.enqueue(object : Callback<Login> {
-            override fun onResponse(call: Call<Login>, response: Response<Login>?) {
-                response?.let {
-                    response.body()?.let {
-
-                        val result :Login =  response.body() as Login //é um Post
-
-                        var str :String  =      result.token
-
-                                        /*
-                                        "token:${result?.token}\n" +
-                                        "id:${result?.id}\n" +
-                                        "title:${result?.title}\n" +
-                                        "body:${result?.body} "
-                                        */
-
-                        callback.onSuccess(str)
-
-                    } ?: run {
-                        //mainPresenter.result(context.getString(R.string.error))
-                    }
-                } ?: run {
-                    //mainPresenter.result(context.getString(R.string.error))
-                }
-            }
-
-            override fun onFailure(call: Call<Login>, t: Throwable) {
-                //.result(context.getString(R.string.error))
-            }
-        })
-    }
-
-    fun requestLogin2(login:Login, context: Context, callback: AsyncCallback) {
+    fun requestLogin(user:User, context: Context, callback: AsyncCallback) {
         var URL :String = Constants.URL_ROOt
 
         val retrofit = Retrofit.Builder()
@@ -76,40 +32,34 @@ class ConnectionService {
 
         val service = retrofit.create(SessionConnection::class.java)
 
-        var auth = service.login2(login)
+        var auth = service.login2(user)
 
-        auth.enqueue(object : Callback<Login> {
-            override fun onResponse(call: Call<Login>, response: Response<Login>?) {
+        auth.enqueue(object : Callback<User> {
+
+            override fun onResponse(call: Call<User>, response: Response<User>?) {
                 response?.let {
                     response.body()?.let {
 
-                        val result :Login =  response.body() as Login //é um Post
+                        val result :User =  response.body() as User //é um Post
 
-                        var str  =      result.token
+                        //var str  =      result.token
 
-                        /*
-                        "token:${result?.token}\n" +
-                        "id:${result?.id}\n" +
-                        "title:${result?.title}\n" +
-                        "body:${result?.body} "
-                        */
-
-                        callback.onSuccess(str)
+                        callback.onSuccess(result)
 
                     } ?: run {
-                        callback.onFailure("Errrooooooo1")
+                        callback.onFailure("Erro 1")
                         //mainPresenter.result(context.getString(R.string.error))
                     }
                 } ?: run {
                     //mainPresenter.result(context.getString(R.string.error))
-                    callback.onFailure("Errrooooooo2")
+                    callback.onFailure("Erro 2")
                 }
             }
 
-            override fun onFailure(call: Call<Login>, t: Throwable) {
+            override fun onFailure(call: Call<User>, t: Throwable) {
                 //.result(context.getString(R.string.error))
 
-                callback.onFailure("Errrooooooo3")
+                callback.onFailure("Erro 3")
             }
         })
     }

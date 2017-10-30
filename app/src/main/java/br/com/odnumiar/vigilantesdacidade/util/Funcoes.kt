@@ -9,7 +9,7 @@ import android.widget.Toast
  */
 class Funcoes {
 
-    fun SetPrefToken(key:String, value :String, context:Context){
+    fun SetPref(key:String, value :String, context:Context){
         var pref = PreferenceManager.getDefaultSharedPreferences(context)
         var editor = pref.edit()
 
@@ -18,5 +18,12 @@ class Funcoes {
         editor.commit()
 
         //Toast.makeText(context, "Login OK", Toast.LENGTH_SHORT).show()
+    }
+
+    fun GetPref(key:String, context:Context):String {
+        var pref = PreferenceManager.getDefaultSharedPreferences(context)
+        var value = pref.getString(key,"") //NOTHING!!!
+
+        return  value;
     }
 }

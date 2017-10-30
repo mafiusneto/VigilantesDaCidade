@@ -13,6 +13,7 @@ import br.com.odnumiar.vigilantesdacidade.models.User
 import br.com.odnumiar.vigilantesdacidade.mvp.ConnectionService
 import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.util.Funcoes
+import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
 import kotlinx.android.synthetic.main.activity_cadastro.*
 
 class CadastroActivity : Activity() {
@@ -49,24 +50,31 @@ class CadastroActivity : Activity() {
             conn.fu_requestCadastro(user, this@CadastroActivity,
                     object : AsyncCallback() {
                         override fun onSuccessLogin(result:User){
-                            Toast.makeText(this@CadastroActivity,"Cadastrado:"+result.name, Toast.LENGTH_SHORT).show()
+                            GlobalParam.vUserToken = "";
+                            GlobalParam.vUserId = result.id
+                            GlobalParam.vUserName= result.name
+                            GlobalParam.vUserToken = result.token
 
-                            var funcao = Funcoes()
-                            funcao.SetPrefToken(Constants.USER_NAME, result.name, this@CadastroActivity)
-                            funcao.SetPrefToken(Constants.USER_ID, result.id.toString(), this@CadastroActivity)
-                            funcao.SetPrefToken(Constants.USER_TOKEN, result.token, this@CadastroActivity)
-                            funcao.SetPrefToken(Constants.KEY_LOGIN, result.token, this@CadastroActivity)
 
-                            val intent = Intent(this@CadastroActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            //var funcao = Funcoes()
+                            //funcao.SetPref(Constants.USER_NAME, result.name, this@CadastroActivity)
+                            //funcao.SetPref(Constants.USER_ID, result.id.toString(), this@CadastroActivity)
+                            //funcao.SetPref(Constants.USER_TOKEN, result.token, this@CadastroActivity)
+                            //funcao.SetPref(Constants.KEY_LOGIN, result.token, this@CadastroActivity)
+                            if (GlobalParam.vUserToken != "") {
+                                val intent = Intent(this@CadastroActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }else{
+                                Toast.makeText(this@CadastroActivity,"Identificador inválido!", Toast.LENGTH_SHORT).show()
+                            }
                             //SetPref Token(login.token)
                             //showResult(result)
                             //hideProgressDialog()
                         }
 
                         override fun onFailure(result: String) {
-                            Toast.makeText(this@CadastroActivity,"Autenticação inválida:"+result, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@CadastroActivity,"Falha no cadastro!", Toast.LENGTH_SHORT).show()
                             //showResult(result)
                             hideProgressDialog()
                         }

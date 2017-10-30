@@ -7,11 +7,14 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.widget.*
+import br.com.odnumiar.vigilantesdacidade.MainActivity
 import br.com.odnumiar.vigilantesdacidade.R
 import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
-import br.com.odnumiar.vigilantesdacidade.models.Login
+import br.com.odnumiar.vigilantesdacidade.models.User
 import br.com.odnumiar.vigilantesdacidade.mvp.ConnectionService
+import br.com.odnumiar.vigilantesdacidade.util.Funcoes
+import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
@@ -44,22 +47,34 @@ class LoginActivity : AppCompatActivity(){
             hideProgressDialog()
 
         }else{
-            var login = Login(etEmail.text.toString(),
-                    etPassword.text.toString(),
-                    "",
-                    "")
+            var user = User("",etPassword.text.toString(),etEmail.text.toString(),"",0)
 
-            login.pass =  login.pass.hashCode().toString()
+            user.pass =  user.pass.hashCode().toString()
 
             var conn = ConnectionService()
 
-            conn.requestLogin2(login, this@LoginActivity,
+            conn.requestLogin(user, this@LoginActivity,
                     object : AsyncCallback() {
-                        override fun onSuccess(result:String){
-                            Toast.makeText(this@LoginActivity,"resulto:"+result,Toast.LENGTH_SHORT).show()
-                            //SetPrefToken(login.token)
-                            //showResult(result)
-                            hideProgressDialog()
+                        override fun onSuccess(result:User){
+                            GlobalParam.vUserToken = "";
+                            GlobalParam.vUserId = result.id
+                            GlobalParam.vUserName= result.name
+                            GlobalParam.vUserToken = result.token
+
+                            Toast.makeText(this@LoginActivity, GlobalParam.vUserToken, Toast.LENGTH_SHORT).show()
+
+                            if (ckbManterConectado.isChecked){
+                                var funcao = Funcoes();
+                                funcao.SetPref(Constants.USER_TOKEN,GlobalParam.vUserToken,this@LoginActivity)
+                                funcao.SetPref(Constants.USER_NAME,GlobalParam.vUserName,this@LoginActivity)
+                                funcao.SetPref(Constants.USER_ID,GlobalParam.vUserId.toString(),this@LoginActivity)
+                            }
+
+                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                            //Toast.makeText(this@LoginActivity,"resulto:"+result,Toast.LENGTH_SHORT).show()
+                            //hideProgressDialog()
                         }
 
                         override fun onFailure(result: String) {

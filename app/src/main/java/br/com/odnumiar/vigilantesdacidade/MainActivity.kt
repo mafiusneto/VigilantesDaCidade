@@ -20,6 +20,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import br.com.odnumiar.vigilantesdacidade.util.Constants
+import br.com.odnumiar.vigilantesdacidade.util.Funcoes
+import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
 import br.com.odnumiar.vigilantesdacidade.views.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -48,9 +50,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 
-        if (Get_SP() == ""){
-            chamaIntent(4)
-            finish()
+        var funcao = Funcoes();
+        if (GlobalParam.vUserToken == "") {
+            GlobalParam.vUserToken = funcao.GetPref(Constants.USER_TOKEN, this@MainActivity)
+        }
+
+        if (GlobalParam.vUserToken == ""){
+            fu_logOff()
+            //chamaIntent(4)  //4 - tela login
+            //finish()
+        }else{
+            //GlobalParam.vUserId = funcao.GetPref(Constants.USER_ID, this@MainActivity).toInt()
+            //GlobalParam.vUserName = funcao.GetPref(Constants.USER_NAME, this@MainActivity)
         }
 
     }
@@ -104,8 +115,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             chamaIntent(3)
         } else if (id == R.id.nav_share) {
             chamaIntent(4)
-        } else if (id == R.id.nav_send) {
-            chamaIntent(5)
+        } else if (id == R.id.logoff) {
+            fu_logOff()
         }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
@@ -134,21 +145,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
                 if (acess){
-                    startActivity(Intent(this, Ac_Denunciar::class.java))
+                    startActivity(Intent(this@MainActivity, Ac_Denunciar::class.java))
                 }
             }
             2 -> {
-                val intent = Intent(this, search_problems::class.java)
+                val intent = Intent(this@MainActivity, search_problems::class.java)
                 startActivity(intent)
                 //Toast.makeText(this@MainActivity,"opc 2",Toast.LENGTH_SHORT).show()
             }
             3 -> {
-                val intent = Intent(this,Ac_Lista_Denuncias::class.java)
+                val intent = Intent(this@MainActivity,Ac_Lista_Denuncias::class.java)
                 startActivity(intent)
                 //Toast.makeText(this@MainActivity,"opc 2",Toast.LENGTH_SHORT).show()
             }
             4 -> {
-                val intent = Intent(this,LoginActivity::class.java)
+                val intent = Intent(this@MainActivity,LoginActivity::class.java)
                 startActivity(intent)
                 //Toast.makeText(this@MainActivity,"opc 4",Toast.LENGTH_SHORT).show()
             }
@@ -177,6 +188,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    fun fu_logOff(){
+        var funcao = Funcoes();
+        funcao.SetPref(Constants.USER_TOKEN, "",this@MainActivity)
+        funcao.SetPref(Constants.USER_NAME, "",this@MainActivity)
+        funcao.SetPref(Constants.USER_ID, "",this@MainActivity)
+
+        chamaIntent(4) //tela login
+        finish()
+    }
+    /*
     fun Get_SP ():String {
         var pref = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
         var value = pref.getString(Constants.KEY_LOGIN,"") //NOTHING!!!
@@ -195,5 +216,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         Toast.makeText(this@MainActivity, "SAVE OK", Toast.LENGTH_SHORT).show()
     }
-
+    */
 }

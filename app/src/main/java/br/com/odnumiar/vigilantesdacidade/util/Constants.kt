@@ -11,5 +11,6 @@ class Constants {
         val USER_NAME = "user_name"
         val USER_TOKEN = "user_token"
         val URL_ROOt :String = "http://otensolutions.pe.hu/webservices/vigilantesdacidade/v1/";
+
     }
 }

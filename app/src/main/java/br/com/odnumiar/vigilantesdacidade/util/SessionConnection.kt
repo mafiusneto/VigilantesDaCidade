@@ -1,6 +1,5 @@
 package br.com.odnumiar.vigilantesdacidade.util
 
-import br.com.odnumiar.vigilantesdacidade.models.Login
 import br.com.odnumiar.vigilantesdacidade.models.Post
 import br.com.odnumiar.vigilantesdacidade.models.User
 import retrofit2.Call
@@ -15,7 +14,7 @@ import retrofit2.http.Path
 interface SessionConnection {
 
     @POST("login.php/")
-    fun login2(@Body login:Login): Call<Login>
+    fun login2(@Body user: User): Call<User>
 
     @POST("user.php/")
     fun cadastro(@Body user:User): Call<User>
@@ -28,5 +27,5 @@ interface SessionConnection {
     fun sendNewPost(@Body post:Post): Call<Post>
 
     @GET("login")
-    fun login(@Body login:Login): Call<Login>
+    fun login(@Body user:User): Call<User>
 }
