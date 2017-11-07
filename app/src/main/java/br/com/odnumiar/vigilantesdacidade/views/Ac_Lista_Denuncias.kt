@@ -12,6 +12,10 @@ import kotlinx.android.synthetic.main.activity_ac__lista__denuncias.*
 
 class Ac_Lista_Denuncias : AppCompatActivity() {
 
+    init{
+        //Log.d("DEBUG_VC", "executado init de ConnectionService")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ac__lista__denuncias)

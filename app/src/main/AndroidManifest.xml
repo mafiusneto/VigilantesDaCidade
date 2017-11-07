@@ -11,6 +11,8 @@
 
     <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
     <uses-feature android:name="android.hardware.location.gps" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-feature android:name="android.hardware.camera2" />
     <uses-feature android:name="android.hardware.camera2.autofocus" />
 
@@ -26,6 +28,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="DATABSE"
+            android:value="vigilantes.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="br.com.odnumiar.vigilantesdacidade.orm" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -37,13 +52,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.LoginActivity"
+            android:name=".views.Ac_Login"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".views.search_problems" />
-        <activity android:name=".views.Ac_Denunciar" />
+        <activity android:name=".views.Ac_Denunciar"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"/>
         <activity android:name=".views.Ac_Lista_Denuncias" />
-        <activity android:name=".views.CadastroActivity"></activity>
+        <activity android:name=".views.Ac_Cadastro"></activity>
     </application>
 
 </manifest>

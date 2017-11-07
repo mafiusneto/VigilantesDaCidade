@@ -17,6 +17,9 @@ class MyAdapter constructor(val context:Context,
                  val eventos:ArrayList<Evento>,
                  val clickListener: (Evento)->Unit)
     :RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+
+    init{}
+
     override fun getItemCount(): Int {
         return eventos.size
     }

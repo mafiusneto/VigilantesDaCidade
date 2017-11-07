@@ -16,7 +16,7 @@ import br.com.odnumiar.vigilantesdacidade.util.Funcoes
 import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
 import kotlinx.android.synthetic.main.activity_cadastro.*
 
-class CadastroActivity : Activity() {
+class Ac_Cadastro : Activity() {
 
     val progress: ProgressDialog by lazy { ProgressDialog(this) }
 
@@ -28,7 +28,7 @@ class CadastroActivity : Activity() {
     fun fu_cadastrar(v:View){
         showProgressDialog()
         if ((etEmail_01.text.toString() == "") || (etPassword_01.text.toString() == "") || (etName_01.text.toString() == "") ) {
-            Toast.makeText(this@CadastroActivity,"Preencha todos os campos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@Ac_Cadastro,"Preencha todos os campos", Toast.LENGTH_SHORT).show()
             hideProgressDialog()
 
         }else{
@@ -37,7 +37,7 @@ class CadastroActivity : Activity() {
                     etEmail_01.text.toString(),
                     "",
                     0
-                    );
+            );
             /*
             var login = Login(etEmail.text.toString(),
                     etPassword.text.toString(),
@@ -47,7 +47,7 @@ class CadastroActivity : Activity() {
             */
             var conn = ConnectionService()
 
-            conn.fu_requestCadastro(user, this@CadastroActivity,
+            conn.fu_requestCadastro(user, this@Ac_Cadastro,
                     object : AsyncCallback() {
                         override fun onSuccessLogin(result:User){
                             GlobalParam.vUserToken = "";
@@ -62,11 +62,11 @@ class CadastroActivity : Activity() {
                             //funcao.SetPref(Constants.USER_TOKEN, result.token, this@CadastroActivity)
                             //funcao.SetPref(Constants.KEY_LOGIN, result.token, this@CadastroActivity)
                             if (GlobalParam.vUserToken != "") {
-                                val intent = Intent(this@CadastroActivity, MainActivity::class.java)
+                                val intent = Intent(this@Ac_Cadastro, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }else{
-                                Toast.makeText(this@CadastroActivity,"Identificador inválido!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@Ac_Cadastro,"Identificador inválido!", Toast.LENGTH_SHORT).show()
                             }
                             //SetPref Token(login.token)
                             //showResult(result)
@@ -74,7 +74,7 @@ class CadastroActivity : Activity() {
                         }
 
                         override fun onFailure(result: String) {
-                            Toast.makeText(this@CadastroActivity,"Falha no cadastro!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@Ac_Cadastro,"Falha no cadastro!", Toast.LENGTH_SHORT).show()
                             //showResult(result)
                             hideProgressDialog()
                         }

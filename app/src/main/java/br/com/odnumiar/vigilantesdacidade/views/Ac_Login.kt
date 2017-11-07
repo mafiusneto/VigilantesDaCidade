@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 /**
  * A login screen that offers login via email/password.
  */
-class LoginActivity : AppCompatActivity(){
+class Ac_Login : AppCompatActivity(){
 
     val progress: ProgressDialog by lazy { ProgressDialog(this) }
 
@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity(){
 
         showProgressDialog()
         if (etEmail.text.toString() == "" || etPassword.text.toString() == "" ) {
-            Toast.makeText(this@LoginActivity,"Autenticação inválida, preencha os campos",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@Ac_Login,"Autenticação inválida, preencha os campos",Toast.LENGTH_SHORT).show()
             hideProgressDialog()
 
         }else{
@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity(){
 
             var conn = ConnectionService()
 
-            conn.requestLogin(user, this@LoginActivity,
+            conn.requestLogin(user, this@Ac_Login,
                     object : AsyncCallback() {
                         override fun onSuccess(result:User){
                             GlobalParam.vUserToken = "";
@@ -61,24 +61,24 @@ class LoginActivity : AppCompatActivity(){
                             GlobalParam.vUserName= result.name
                             GlobalParam.vUserToken = result.token
 
-                            Toast.makeText(this@LoginActivity, GlobalParam.vUserToken, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@Ac_Login, GlobalParam.vUserToken, Toast.LENGTH_SHORT).show()
 
                             if (ckbManterConectado.isChecked){
                                 var funcao = Funcoes();
-                                funcao.SetPref(Constants.USER_TOKEN,GlobalParam.vUserToken,this@LoginActivity)
-                                funcao.SetPref(Constants.USER_NAME,GlobalParam.vUserName,this@LoginActivity)
-                                funcao.SetPref(Constants.USER_ID,GlobalParam.vUserId.toString(),this@LoginActivity)
+                                funcao.SetPref(Constants.USER_TOKEN,GlobalParam.vUserToken,this@Ac_Login)
+                                funcao.SetPref(Constants.USER_NAME,GlobalParam.vUserName,this@Ac_Login)
+                                funcao.SetPref(Constants.USER_ID,GlobalParam.vUserId.toString(),this@Ac_Login)
                             }
 
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            val intent = Intent(this@Ac_Login, MainActivity::class.java)
                             startActivity(intent)
                             finish()
-                            //Toast.makeText(this@LoginActivity,"resulto:"+result,Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(this@Ac_Login,"resulto:"+result,Toast.LENGTH_SHORT).show()
                             //hideProgressDialog()
                         }
 
                         override fun onFailure(result: String) {
-                            Toast.makeText(this@LoginActivity,"Autenticação inválida:"+result,Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@Ac_Login,"Autenticação inválida:"+result,Toast.LENGTH_SHORT).show()
                             //showResult(result)
                             hideProgressDialog()
                         }
@@ -96,16 +96,16 @@ class LoginActivity : AppCompatActivity(){
             finish()
 
         }else{
-            Toast.makeText(this@LoginActivity,"Autenticação inválida!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@Ac_Login,"Autenticação inválida!",Toast.LENGTH_SHORT).show()
         }
         */
     }
 
     fun fu_cadastro(v:View){
-        val intent = Intent(this, CadastroActivity::class.java)
+        val intent = Intent(this, Ac_Cadastro::class.java)
         startActivity(intent)
         finish()
-        //Toast.makeText(this@LoginActivity,"Cadastro!",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this@Ac_Login,"Cadastro!",Toast.LENGTH_SHORT).show()
     }
 
     fun showProgressDialog() {
@@ -127,7 +127,7 @@ class LoginActivity : AppCompatActivity(){
                 Constants.KEY_LOGIN,v)
         editor.commit()
 
-        Toast.makeText(this@LoginActivity, "Login OK", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@Ac_Login, "Login OK", Toast.LENGTH_SHORT).show()
     }
 
 

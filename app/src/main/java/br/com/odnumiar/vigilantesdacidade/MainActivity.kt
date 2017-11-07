@@ -5,10 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
-import android.view.View
 import android.support.design.widget.NavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.view.GravityCompat
@@ -145,6 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
                 if (acess){
+                    GlobalParam.vTiraFoto = 1
                     startActivity(Intent(this@MainActivity, Ac_Denunciar::class.java))
                 }
             }
@@ -159,7 +158,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 //Toast.makeText(this@MainActivity,"opc 2",Toast.LENGTH_SHORT).show()
             }
             4 -> {
-                val intent = Intent(this@MainActivity,LoginActivity::class.java)
+                val intent = Intent(this@MainActivity, Ac_Login::class.java)
                 startActivity(intent)
                 //Toast.makeText(this@MainActivity,"opc 4",Toast.LENGTH_SHORT).show()
             }
