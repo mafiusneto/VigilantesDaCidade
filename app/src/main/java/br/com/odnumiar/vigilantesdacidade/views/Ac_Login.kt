@@ -56,7 +56,7 @@ class Ac_Login : AppCompatActivity(){
             conn.requestLogin(user, this@Ac_Login,
                     object : AsyncCallback() {
                         override fun onSuccess(result:User){
-                            GlobalParam.vUserToken = "";
+                            GlobalParam.vUserToken = ""
                             GlobalParam.vUserId = result.id
                             GlobalParam.vUserName= result.name
                             GlobalParam.vUserToken = result.token
@@ -64,7 +64,7 @@ class Ac_Login : AppCompatActivity(){
                             Toast.makeText(this@Ac_Login, GlobalParam.vUserToken, Toast.LENGTH_SHORT).show()
 
                             if (ckbManterConectado.isChecked){
-                                var funcao = Funcoes();
+                                var funcao = Funcoes()
                                 funcao.SetPref(Constants.USER_TOKEN,GlobalParam.vUserToken,this@Ac_Login)
                                 funcao.SetPref(Constants.USER_NAME,GlobalParam.vUserName,this@Ac_Login)
                                 funcao.SetPref(Constants.USER_ID,GlobalParam.vUserId.toString(),this@Ac_Login)

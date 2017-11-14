@@ -1,39 +1,45 @@
 package br.com.odnumiar.vigilantesdacidade.views
 
-import android.Manifest
 import android.app.Activity
-import android.content.Context
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import br.com.odnumiar.vigilantesdacidade.R
-import android.provider.MediaStore
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.widget.Toast
-import android.net.Uri
-import android.os.Build
-import android.support.v4.app.ActivityCompat.requestPermissions
-import android.view.View
-import kotlinx.android.synthetic.main.activity_ac__denunciar.*
 import android.graphics.Bitmap
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
+import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
+import android.provider.MediaStore
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import br.com.odnumiar.vigilantesdacidade.util.Constants
-import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
-import android.location.Criteria
+import android.view.View
+import android.widget.Toast
+import br.com.odnumiar.vigilantesdacidade.R
 import br.com.odnumiar.vigilantesdacidade.models.Coordenadas
+import br.com.odnumiar.vigilantesdacidade.orm.Posts
+import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.util.Funcoes
+import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
+import com.orm.SugarRecord
+import kotlinx.android.synthetic.main.activity_ac__denunciar.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class Ac_Denunciar : AppCompatActivity() {
+class Ac_Denunciar() : AppCompatActivity(), Parcelable {
 
     val TIRAR_FOTO = 1//1020394857;
+    //public val MEDIA_TYPE_IMAGE = 1
+    //public val MEDIA_TYPE_VIDEO = 2
+    //var mCamera: Camera = Camera()
+
     private var msg :String = ""
     private var coord = Coordenadas(0.0,0.0,0)
     private lateinit  var bitmap :Bitmap
     private val func = Funcoes()
+
+    constructor(parcel: Parcel) : this() {
+        msg = parcel.readString()
+        bitmap = parcel.readParcelable(Bitmap::class.java.classLoader)
+    }
 
     init{
         //Log.d("DEBUG_VC", "executado init de ConnectionService")
@@ -48,7 +54,20 @@ class Ac_Denunciar : AppCompatActivity() {
             //fu_chamaCamera()
             //GlobalParam.vTiraFoto = 0
         }
+
+        /*
+        try{
+            //var s:Posts = Posts()
+            var l:Posts = SugarRecord.findById(Posts::class.java,1L)
+            Toast.makeText(this@Ac_Denunciar,l.description.toString(),Toast.LENGTH_SHORT).show()
+        } catch (e:Exception){
+            Log.e(Constants.MYTAG,"ERRO - "+e.message.toString()+"\n"+e.stackTrace.toString())
+            Toast.makeText(this@Ac_Denunciar,"Erro 1",Toast.LENGTH_SHORT).show()
+        }
+        */
     }
+
+
     fun addText(v:String){
         etDescricao.setText(v)
     }
@@ -67,22 +86,44 @@ class Ac_Denunciar : AppCompatActivity() {
                 coord = func.getLocation(this@Ac_Denunciar) //getLocation()
                 msg = "latitude:"+coord.lat.toString() + "| Logitude: "+coord.long.toString()
             } catch(ex: SecurityException) {
-                Log.d(Constants.MYTAG, "Security Exception, no location available");
+                Log.d(Constants.MYTAG, "Security Exception, no location available")
             }
         }
         addText(msg)
     }
-    /*
+
     fun fu_Back(v:View){
-       //função voltar
-        finish()
+        //função voltar
+        // finish()
+        onBackPressed()
     }
-    */
+
     fun fu_Post(v:View){
-        func.saveFile(this@Ac_Denunciar,bitmap,"testepost")
-        addText("teste")
+        //var fmt:SimpleDateFormat = SimpleDateFormat('dd/MM/yyyy')
+
+        var fmt :SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        try {
+            var p :Posts = Posts()
+
+            p.userId = GlobalParam.vUserId
+            p.description = GlobalParam.vUserName+"\n/n"+ etDescricao.text.toString()
+            p.image = "adsadsa"
+            p.imageL = "adsasd"
+            p.lat = coord.lat
+            p.long = coord.long
+            p.date = fmt.format(Date().time)
+            //p.id = 500L
+            p.save()
+
+            Toast.makeText(this@Ac_Denunciar,"Salvo com sucesso", Toast.LENGTH_SHORT).show()
+            finish()
+        } catch (e:Exception){
+            Log.e(Constants.MYTAG,e.message.toString()+"\n"+e.stackTrace.toString())
+            Toast.makeText(this@Ac_Denunciar,"Erro!", Toast.LENGTH_SHORT).show()
+        }
+        //func.saveFile(this@Ac_Denunciar,bitmap,"testepost")
+        //addText("teste")
         //postar denuciar
-        Toast.makeText(this@Ac_Denunciar,"teste post",Toast.LENGTH_SHORT).show()
     }
 
     fun fu_chamaCamera() {
@@ -165,5 +206,23 @@ class Ac_Denunciar : AppCompatActivity() {
         startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:9834")))
     }
     */
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(msg)
+        parcel.writeParcelable(bitmap, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Ac_Denunciar> {
+        override fun createFromParcel(parcel: Parcel): Ac_Denunciar {
+            return Ac_Denunciar(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Ac_Denunciar?> {
+            return arrayOfNulls(size)
+        }
+    }
 
 }

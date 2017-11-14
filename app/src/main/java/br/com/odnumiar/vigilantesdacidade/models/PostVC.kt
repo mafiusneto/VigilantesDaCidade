@@ -11,4 +11,4 @@ class PostVC(var id :Long,
            var gps_log :Float,
            var image :String,
            var user_id :Long,
-           var date_post :String) {}
+           var date_post :String)

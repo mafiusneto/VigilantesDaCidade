@@ -1,13 +1,12 @@
 package br.com.odnumiar.vigilantesdacidade.orm
 
 import com.orm.SugarRecord
-import java.util.*
 
 /**
  * Created by Neto on 07/11/2017.
  */
-class Posts (): SugarRecord(){
-    var postId:Int = 0
+
+class Posts() : SugarRecord(){
     var userId:Int = 0
     var description:String = ""
     var image:String = ""

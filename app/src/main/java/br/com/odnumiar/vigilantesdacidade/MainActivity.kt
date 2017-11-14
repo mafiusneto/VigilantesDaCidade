@@ -13,14 +13,19 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import br.com.odnumiar.vigilantesdacidade.models.Evento
 import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.util.Funcoes
 import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
 import br.com.odnumiar.vigilantesdacidade.views.*
+import com.example.neto.aula1_1.adapters.MyAdapter
+import com.orm.SugarContext
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -30,6 +35,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //SugarContext.init(this@MainActivity)
+
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
@@ -48,7 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 
-        var funcao = Funcoes();
+        var funcao = Funcoes()
         if (GlobalParam.vUserToken == "") {
             GlobalParam.vUserToken = funcao.GetPref(Constants.USER_TOKEN, this@MainActivity)
         }
@@ -58,14 +66,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             //chamaIntent(4)  //4 - tela login
             //finish()
         }else{
-            //GlobalParam.vUserId = funcao.GetPref(Constants.USER_ID, this@MainActivity).toInt()
-            //GlobalParam.vUserName = funcao.GetPref(Constants.USER_NAME, this@MainActivity)
+            if (GlobalParam.vUserName == "") {
+                GlobalParam.vUserId = funcao.GetPref(Constants.USER_ID, this@MainActivity).toInt()
+                GlobalParam.vUserName = funcao.GetPref(Constants.USER_NAME, this@MainActivity)
+            }
         }
 
     }
 
-    override fun onStart() {
-        super.onStart()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //SugarContext.terminate()
     }
 
     override fun onBackPressed() {
@@ -127,8 +139,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(x){
             1 -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if( (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) or
-                        (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)){
+                    if( (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                            or (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)){
 
                         ActivityCompat.requestPermissions(this@MainActivity,
                                 arrayOf(Manifest.permission.CAMERA,
@@ -188,7 +200,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun fu_logOff(){
-        var funcao = Funcoes();
+        var funcao = Funcoes()
         funcao.SetPref(Constants.USER_TOKEN, "",this@MainActivity)
         funcao.SetPref(Constants.USER_NAME, "",this@MainActivity)
         funcao.SetPref(Constants.USER_ID, "",this@MainActivity)
@@ -196,24 +208,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         chamaIntent(4) //tela login
         finish()
     }
-    /*
-    fun Get_SP ():String {
-        var pref = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
-        var value = pref.getString(Constants.KEY_LOGIN,"") //NOTHING!!!
 
-        return  value;
-        //Toast.makeText(this@MainActivity, value, Toast.LENGTH_SHORT).show()
+    fun fu_preenche_lista() {
+
+        rvLista.setHasFixedSize(true)
+        rvLista.layoutManager = LinearLayoutManager(this)
+
+
+
+        var eventos: ArrayList<Evento> = ArrayList<Evento>()
+        for (x in 0..200) {
+            eventos.add(Evento("Title ${x}", "Desc ${x}"))
+        }
+        var adapter = MyAdapter(this, eventos) {
+            Toast.makeText(this@MainActivity,
+                    it.title + " - " + it.desc,
+                    Toast.LENGTH_SHORT).show()
+        }
+
+        rvLista.adapter = adapter
+
     }
 
-    fun Save_SP(v:View) {
-        var pref = PreferenceManager.getDefaultSharedPreferences(this)
-        var editor = pref.edit()
 
-        //save infos
-        editor.putString(Constants.KEY_LOGIN,"")
-        editor.commit()
-
-        Toast.makeText(this@MainActivity, "SAVE OK", Toast.LENGTH_SHORT).show()
-    }
-    */
 }

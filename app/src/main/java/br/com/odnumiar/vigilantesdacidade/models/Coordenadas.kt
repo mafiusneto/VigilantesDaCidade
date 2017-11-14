@@ -5,4 +5,4 @@ package br.com.odnumiar.vigilantesdacidade.models
  */
 class Coordenadas(var lat:Double,
                   var long:Double,
-                  var ativo:Int=0) {}
+                  var ativo:Int=0)

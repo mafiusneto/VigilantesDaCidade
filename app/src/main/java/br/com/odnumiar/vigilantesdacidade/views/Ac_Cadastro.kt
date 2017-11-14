@@ -37,7 +37,7 @@ class Ac_Cadastro : Activity() {
                     etEmail_01.text.toString(),
                     "",
                     0
-            );
+            )
             /*
             var login = Login(etEmail.text.toString(),
                     etPassword.text.toString(),
@@ -50,7 +50,7 @@ class Ac_Cadastro : Activity() {
             conn.fu_requestCadastro(user, this@Ac_Cadastro,
                     object : AsyncCallback() {
                         override fun onSuccessLogin(result:User){
-                            GlobalParam.vUserToken = "";
+                            GlobalParam.vUserToken = ""
                             GlobalParam.vUserId = result.id
                             GlobalParam.vUserName= result.name
                             GlobalParam.vUserToken = result.token

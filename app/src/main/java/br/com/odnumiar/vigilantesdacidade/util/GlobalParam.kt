@@ -7,10 +7,10 @@ class GlobalParam {
 
 
     companion object {
-        var vUserName :String = "";
-        var vUserToken :String = "";
-        var vUserId :Int = 0;
-        var vTiraFoto :Int = 1;
+        var vUserName :String = ""
+        var vUserToken :String = ""
+        var vUserId :Int = 0
+        var vTiraFoto :Int = 1
 
     }
 }

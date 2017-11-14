@@ -3,6 +3,7 @@ package br.com.odnumiar.vigilantesdacidade.mvp
 import android.content.Context
 import android.util.Log
 import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
+import br.com.odnumiar.vigilantesdacidade.models.Login
 import br.com.odnumiar.vigilantesdacidade.models.User
 import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.util.SessionConnection
@@ -32,7 +33,12 @@ class ConnectionService {
 
         val service = retrofit.create(SessionConnection::class.java)
 
-        var auth = service.login2(user)
+        var l = Login()
+        //l.to=user.name
+        l.pass=user.pass
+        l.email=user.email
+
+        var auth = service.login2(l)
 
         auth.enqueue(object : Callback<User> {
 

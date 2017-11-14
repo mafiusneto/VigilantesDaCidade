@@ -8,4 +8,4 @@ class Post(var postId:Int,
            var description:String,
            var image:String,
            var imageL:String,
-           var coordenadas:Coordenadas) {}
+           var coordenadas:Coordenadas)

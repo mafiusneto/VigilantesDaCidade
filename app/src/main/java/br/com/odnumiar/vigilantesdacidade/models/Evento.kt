@@ -5,5 +5,4 @@ package br.com.odnumiar.vigilantesdacidade.models
  */
 class Evento(
         var title :String,
-        var desc :String) {
-}
+        var desc :String)

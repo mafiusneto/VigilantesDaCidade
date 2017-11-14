@@ -7,4 +7,4 @@ class User (var name:String,
             var pass:String,
             var email:String,
             var token:String,
-            var id:Int){}
+            var id:Int)

@@ -35,9 +35,11 @@ class Funcoes {
         var pref = PreferenceManager.getDefaultSharedPreferences(context)
         var value = pref.getString(key,"") //NOTHING!!!
 
-        return  value;
+        return  value
     }
 
+
+    /*
     fun saveFile(context: Context, b: Bitmap, picName: String) {
         var fos: FileOutputStream? = null
         try {
@@ -71,7 +73,7 @@ class Funcoes {
         }
         return b
     }
-
+    */
     fun getLocation(context:Context): Coordenadas { //: LatLng?
         // Get the location manager
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
