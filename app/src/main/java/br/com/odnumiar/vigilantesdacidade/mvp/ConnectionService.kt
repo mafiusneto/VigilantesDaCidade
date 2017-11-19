@@ -1,27 +1,129 @@
 package br.com.odnumiar.vigilantesdacidade.mvp
 
 import android.content.Context
-import android.util.Log
+import android.graphics.Bitmap
 import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
 import br.com.odnumiar.vigilantesdacidade.models.Login
 import br.com.odnumiar.vigilantesdacidade.models.User
+import br.com.odnumiar.vigilantesdacidade.orm.Posts
 import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.util.SessionConnection
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.ByteArrayOutputStream
+
 
 class ConnectionService {
 
     init{
-        Log.d("DEBUG_VC", "executado init de ConnectionService")
+        //Log.d("DEBUG_VC", "executado init de ConnectionService")
     }
 
     constructor(){
-        Log.d("DEBUG_VC", "executando construtor de ConnectionService")
+        //Log.d("DEBUG_VC", "executando construtor de ConnectionService")
     }
+
+    fun sendPost(post:Posts, image:Bitmap,  context: Context, callback: AsyncCallback){
+        var URL :String = Constants.URL_ROOt
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        val service = retrofit.create(SessionConnection::class.java)
+
+        val bos: ByteArrayOutputStream = ByteArrayOutputStream();
+        if (image.compress(Bitmap.CompressFormat.PNG, 100, bos)){ //quality 0
+
+            //Convert bitmap to byte array
+            var bitmapdata :ByteArray = bos.toByteArray()
+            // build request containing file
+            val fileBody = RequestBody.create(MediaType.parse("image/jpeg"), bitmapdata) //multipart/form-data
+            val filePart = MultipartBody.Part.createFormData("picture", "picture.jpg", fileBody)
+
+            //val fileBody2 = RequestBody.create(okhttp3.MultipartBody.FORM, post.toString())
+
+
+            var auth = service.sendNewPost(filePart, post ) //fileBody2, filePart
+
+            auth.enqueue(object : Callback<Posts> {
+
+                override fun onResponse(call: Call<Posts>, response: Response<Posts>?) {
+                    response?.let {
+                        response.body()?.let {
+
+                            val result :Posts =  response.body() as Posts //é um Post
+
+                            callback.onSuccess(result)
+
+                        } ?: run {
+                            callback.onFailure("Erro 1")
+                            //mainPresenter.result(context.getString(R.string.error))
+                        }
+                    } ?: run {
+                        //mainPresenter.result(context.getString(R.string.error))
+                        callback.onFailure("Erro 2")
+                    }
+                }
+
+                override fun onFailure(call: Call<Posts>, t: Throwable) {
+                    //.result(context.getString(R.string.error))
+
+                    callback.onFailure("Erro 3")
+                }
+            })
+        }
+
+
+    }
+
+    fun requestPosts(id:Int,  context: Context, callback: AsyncCallback){
+        var URL :String = Constants.URL_ROOt
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        val service = retrofit.create(SessionConnection::class.java)
+
+        var auth = service.requestPosts()
+        auth.enqueue(object : Callback(List<Posts>) {
+
+            override fun onResponse(call: Call<List<Posts>>, response: Response<List<Posts>>?) {
+                response?.let {
+                    response.body()?.let {
+
+                        val result :List<Posts> =  response.body() as List<Posts> //é um Post
+
+                        callback.onSuccess(result)
+
+                    } ?: run {
+                        callback.onFailure("Erro 1")
+                        //mainPresenter.result(context.getString(R.string.error))
+                    }
+                } ?: run {
+                    //mainPresenter.result(context.getString(R.string.error))
+                    callback.onFailure("Erro 2")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Posts>>, t: Throwable) {
+                //.result(context.getString(R.string.error))
+
+                callback.onFailure("Erro 3")
+            }
+        })
+
+    }
+
 
     fun requestLogin(user:User, context: Context, callback: AsyncCallback) {
         var URL :String = Constants.URL_ROOt
@@ -109,6 +211,10 @@ class ConnectionService {
 
         })
     }
+
+
+
+
 
     /*
     fun sendNewPost(post:Post, context: Context, callback: AsyncCallback) {

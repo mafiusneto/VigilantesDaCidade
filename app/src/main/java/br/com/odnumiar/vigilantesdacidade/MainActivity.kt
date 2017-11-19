@@ -6,8 +6,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -18,13 +18,18 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import br.com.odnumiar.vigilantesdacidade.models.Evento
+import br.com.odnumiar.vigilantesdacidade.adapters.AdapterPosts
+import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
+import br.com.odnumiar.vigilantesdacidade.mvp.ConnectionService
+import br.com.odnumiar.vigilantesdacidade.orm.Posts
 import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.util.Funcoes
 import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
-import br.com.odnumiar.vigilantesdacidade.views.*
-import com.example.neto.aula1_1.adapters.MyAdapter
-import com.orm.SugarContext
+import br.com.odnumiar.vigilantesdacidade.views.Ac_Denunciar
+import br.com.odnumiar.vigilantesdacidade.views.Ac_Lista_Denuncias
+import br.com.odnumiar.vigilantesdacidade.views.Ac_Login
+import br.com.odnumiar.vigilantesdacidade.views.search_problems
+import com.orm.SugarRecord
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -35,8 +40,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        //SugarContext.init(this@MainActivity)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -74,10 +77,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        //SugarContext.terminate()
+    override fun onResume() {
+        super.onResume()
+        preenche_lista()
     }
 
     override fun onBackPressed() {
@@ -140,11 +142,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             1 -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                     if( (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                            or (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)){
+                            or (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                            or (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)){
 
                         ActivityCompat.requestPermissions(this@MainActivity,
                                 arrayOf(Manifest.permission.CAMERA,
-                                        Manifest.permission.READ_EXTERNAL_STORAGE),
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.ACCESS_FINE_LOCATION),
                                 0)
 
                     }else{
@@ -179,6 +183,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
+
+
         /*
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 if(checkSelfPermission(Manifest.permission.CAMERA)
@@ -209,25 +215,61 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         finish()
     }
 
-    fun fu_preenche_lista() {
+    fun preenche_lista(){
 
         rvLista.setHasFixedSize(true)
         rvLista.layoutManager = LinearLayoutManager(this)
 
+        //var posts:List<Posts> =  SugarRecord.listAll(Posts::class.java)//ArrayList<Posts>()
+        var posts:List<Posts> = fu_ConsultaPostagens()
 
-
-        var eventos: ArrayList<Evento> = ArrayList<Evento>()
-        for (x in 0..200) {
-            eventos.add(Evento("Title ${x}", "Desc ${x}"))
-        }
-        var adapter = MyAdapter(this, eventos) {
-            Toast.makeText(this@MainActivity,
-                    it.title + " - " + it.desc,
-                    Toast.LENGTH_SHORT).show()
+        var adapter = AdapterPosts(this, ArrayList(posts)){
         }
 
         rvLista.adapter = adapter
+    }
 
+    fun fu_ConsultaPostagens():List<Posts>{
+
+        var conn = ConnectionService()
+
+        var lista = ArrayList<Posts>()
+
+        conn.requestPosts (GlobalParam.vUserId, this@MainActivity,
+            object : AsyncCallback() {
+                override fun onSuccess(result:List<Posts>){
+                    lista = ArrayList<Posts>(result)
+                    /*
+                    GlobalParam.vUserToken = ""
+                    GlobalParam.vUserId = result.id
+                    GlobalParam.vUserName= result.name
+                    GlobalParam.vUserToken = result.token
+
+                    Toast.makeText(this@Ac_Denunciar, GlobalParam.vUserToken, Toast.LENGTH_SHORT).show()
+
+                    if (ckbManterConectado.isChecked){
+                        var funcao = Funcoes()
+                        funcao.SetPref(Constants.USER_TOKEN,GlobalParam.vUserToken,this@Ac_Login)
+                        funcao.SetPref(Constants.USER_NAME,GlobalParam.vUserName,this@Ac_Login)
+                        funcao.SetPref(Constants.USER_ID,GlobalParam.vUserId.toString(),this@Ac_Login)
+                    }
+
+                    val intent = Intent(this@Ac_Denunciar, ::class.java)
+                    startActivity(intent)
+                    finish()
+                    */
+                    //Toast.makeText(this@Ac_Denunciar,"resulto:"+result,Toast.LENGTH_SHORT).show()
+                    //hideProgressDialog()
+                }
+
+                override fun onFailure(result: String) {
+                    Toast.makeText(this@MainActivity,"Falha ao consultar postagens!:"+result,Toast.LENGTH_SHORT).show()
+                    //showResult(result)
+                    //hideProgressDialog()
+                }
+            })
+
+        return  lista
     }
 
 

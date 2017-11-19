@@ -85,7 +85,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="5"
-            android:inputType="text|textMultiLine"
+            android:inputType="textAutoCorrect|textMultiLine"
             android:gravity="left|top"
             android:background="#d9d7d7"
             android:maxLength="250"/>

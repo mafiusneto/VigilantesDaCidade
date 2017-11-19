@@ -8,6 +8,7 @@ import com.orm.SugarRecord
 
 class Posts() : SugarRecord(){
     var userId:Int = 0
+    var userName:String = ""
     var description:String = ""
     var image:String = ""
     var imageL:String = ""

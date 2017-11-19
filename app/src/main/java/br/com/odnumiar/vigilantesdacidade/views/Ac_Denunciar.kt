@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Environment
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.MediaStore
@@ -22,22 +23,32 @@ import kotlinx.android.synthetic.main.activity_ac__denunciar.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import android.os.Environment.DIRECTORY_PICTURES
+import android.support.v4.content.FileProvider
+import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
+import br.com.odnumiar.vigilantesdacidade.mvp.ConnectionService
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
-class Ac_Denunciar() : AppCompatActivity(), Parcelable {
+class Ac_Denunciar() : AppCompatActivity(){
 
     val TIRAR_FOTO = 1//1020394857;
+    var mCurrentPhotoPath:String =""
     //public val MEDIA_TYPE_IMAGE = 1
     //public val MEDIA_TYPE_VIDEO = 2
     //var mCamera: Camera = Camera()
 
-    private var msg :String = ""
+    //private var msg :String = ""
     private var coord = Coordenadas(0.0,0.0,0)
     private lateinit  var bitmap :Bitmap
     private val func = Funcoes()
+    private var p :Posts = Posts()
 
     constructor(parcel: Parcel) : this() {
-        msg = parcel.readString()
+        //msg = parcel.readString()
         bitmap = parcel.readParcelable(Bitmap::class.java.classLoader)
     }
 
@@ -54,23 +65,8 @@ class Ac_Denunciar() : AppCompatActivity(), Parcelable {
             //fu_chamaCamera()
             //GlobalParam.vTiraFoto = 0
         }
-
-        /*
-        try{
-            //var s:Posts = Posts()
-            var l:Posts = SugarRecord.findById(Posts::class.java,1L)
-            Toast.makeText(this@Ac_Denunciar,l.description.toString(),Toast.LENGTH_SHORT).show()
-        } catch (e:Exception){
-            Log.e(Constants.MYTAG,"ERRO - "+e.message.toString()+"\n"+e.stackTrace.toString())
-            Toast.makeText(this@Ac_Denunciar,"Erro 1",Toast.LENGTH_SHORT).show()
-        }
-        */
     }
 
-
-    fun addText(v:String){
-        etDescricao.setText(v)
-    }
 
     fun setBitmapImage(b:Bitmap){
         bitmap = b
@@ -84,12 +80,12 @@ class Ac_Denunciar() : AppCompatActivity(), Parcelable {
                 // Request location updates
                 //locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
                 coord = func.getLocation(this@Ac_Denunciar) //getLocation()
-                msg = "latitude:"+coord.lat.toString() + "| Logitude: "+coord.long.toString()
+                //msg = "latitude:"+coord.lat.toString() + "| Logitude: "+coord.long.toString()
             } catch(ex: SecurityException) {
                 Log.d(Constants.MYTAG, "Security Exception, no location available")
             }
         }
-        addText(msg)
+        //addText(msg)
     }
 
     fun fu_Back(v:View){
@@ -101,21 +97,22 @@ class Ac_Denunciar() : AppCompatActivity(), Parcelable {
     fun fu_Post(v:View){
         //var fmt:SimpleDateFormat = SimpleDateFormat('dd/MM/yyyy')
 
-        var fmt :SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var fmt :SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
         try {
-            var p :Posts = Posts()
 
             p.userId = GlobalParam.vUserId
-            p.description = GlobalParam.vUserName+"\n/n"+ etDescricao.text.toString()
-            p.image = "adsadsa"
-            p.imageL = "adsasd"
+            p.userName = GlobalParam.vUserName
+            p.description = etDescricao.text.toString()
+            p.image = ""
+            p.imageL = ""
             p.lat = coord.lat
             p.long = coord.long
             p.date = fmt.format(Date().time)
             //p.id = 500L
+            //Toast.makeText(this@Ac_Denunciar,"Salvo com sucesso", Toast.LENGTH_SHORT).show()
+            fu_Post2(v);
             p.save()
 
-            Toast.makeText(this@Ac_Denunciar,"Salvo com sucesso", Toast.LENGTH_SHORT).show()
             finish()
         } catch (e:Exception){
             Log.e(Constants.MYTAG,e.message.toString()+"\n"+e.stackTrace.toString())
@@ -127,8 +124,82 @@ class Ac_Denunciar() : AppCompatActivity(), Parcelable {
     }
 
     fun fu_chamaCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, TIRAR_FOTO)
+        try {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intent, TIRAR_FOTO)
+            //dispatchTakePictureIntent()
+            Log.d(Constants.MYTAG, "OK fu_chamaCamera")
+        } catch (e:Exception){
+            Log.e(Constants.MYTAG, "Erro: "+e.message.toString()+"\n"+e.printStackTrace().toString())
+        }
+    }
+
+    fun fu_Post2(v:View){
+
+        //showProgressDialog()
+        if (true) {
+            //var user = User("",etPassword.text.toString(),etEmail.text.toString(),"",0)
+            //user.pass =  user.pass.hashCode().toString()
+
+            var conn = ConnectionService()
+
+            conn.sendPost (p,bitmap, this@Ac_Denunciar,
+                    object : AsyncCallback() {
+                        override fun onSuccess(result:Posts){
+                            /*
+                            GlobalParam.vUserToken = ""
+                            GlobalParam.vUserId = result.id
+                            GlobalParam.vUserName= result.name
+                            GlobalParam.vUserToken = result.token
+
+                            Toast.makeText(this@Ac_Denunciar, GlobalParam.vUserToken, Toast.LENGTH_SHORT).show()
+
+                            if (ckbManterConectado.isChecked){
+                                var funcao = Funcoes()
+                                funcao.SetPref(Constants.USER_TOKEN,GlobalParam.vUserToken,this@Ac_Login)
+                                funcao.SetPref(Constants.USER_NAME,GlobalParam.vUserName,this@Ac_Login)
+                                funcao.SetPref(Constants.USER_ID,GlobalParam.vUserId.toString(),this@Ac_Login)
+                            }
+
+                            val intent = Intent(this@Ac_Denunciar, ::class.java)
+                            startActivity(intent)
+                            finish()
+
+
+                            */
+                            p.image = result.image
+                            Toast.makeText(this@Ac_Denunciar,"Postado!",Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(this@Ac_Denunciar,"resulto:"+result,Toast.LENGTH_SHORT).show()
+                            //hideProgressDialog()
+                        }
+
+                        override fun onFailure(result: String) {
+                            Toast.makeText(this@Ac_Denunciar,"Erro na postagem!:"+result,Toast.LENGTH_LONG).show()
+                            //showResult(result)
+                            //hideProgressDialog()
+                        }
+                    })
+
+            //hideProgressDialog()
+
+
+        }
+    }
+
+    private fun writeToFile(scaledBitmap: Bitmap): String {
+        val f: File = File(Environment.getExternalStorageDirectory(), "${Date().time}.png");
+        f.createNewFile();
+        //Convert bitmap to byte array
+        val bos: ByteArrayOutputStream = ByteArrayOutputStream();
+        scaledBitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+
+        //write the bytes in file
+        val fos: FileOutputStream = FileOutputStream(f)
+        fos.write(bos.toByteArray());
+        fos.flush();
+        fos.close();
+
+        return f.absolutePath
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -138,8 +209,8 @@ class Ac_Denunciar() : AppCompatActivity(), Parcelable {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     val bundle = data.extras
-                    val bitmap = bundle.get("data") as Bitmap
-                    setBitmapImage(bitmap)
+                    bitmap = bundle.get("data") as Bitmap
+                    //setBitmapImage(bitmap) //add ao bitmap geral
                     ivPhoto.setImageBitmap(bitmap)
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     Toast.makeText(baseContext, "A captura foi cancelada",
@@ -159,70 +230,47 @@ class Ac_Denunciar() : AppCompatActivity(), Parcelable {
             onBackPressed()
         }
     }
-    /*
-    fun getLocation():Coordenadas{ //: LatLng?
-        // Get the location manager
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val criteria = Criteria()
-        val bestProvider = locationManager.getBestProvider(criteria, false)
-        val location = locationManager.getLastKnownLocation(bestProvider)
-        //val lat: Double?
-        //val lon: Double?
-        var coordenada = Coordenadas(0.0,0.0,0)
-        try {
-            coordenada.lat = location.latitude
-            coordenada.long = location.longitude
-            coordenada.ativo = 1
-            //msg ="Lat: "+lat.toString()+" | long: "+lon.toString()
-            //return LatLng(lat, lon)
-        } catch (e: NullPointerException) {
-            msg ="Erro"
-            e.printStackTrace()
-            //return null
-        }
 
-        return coordenada
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "JPEG_" + timeStamp + "_"
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+                imageFileName, /* prefix */
+                ".jpg", /* suffix */
+                storageDir      /* directory */
+        )
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath()
+        return image
     }
 
-    fun fazerLigacao(v: View) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(checkSelfPermission(Manifest.permission.CALL_PHONE)
-                    != PackageManager.PERMISSION_GRANTED){
-
-                requestPermissions(this@Ac_Denunciar,
-                        arrayOf(Manifest.permission.CALL_PHONE),
-                        0)
-
-            }else{
-                callNumber()
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile()
+            } catch (ex: IOException) {
+                // Error occurred while creating the Fil
             }
-        }else{
-            callNumber()
-        }
-        //onLaunchCamera(v)
-    }
 
-    fun callNumber(){
-        startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:9834")))
-    }
-    */
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(msg)
-        parcel.writeParcelable(bitmap, flags)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Ac_Denunciar> {
-        override fun createFromParcel(parcel: Parcel): Ac_Denunciar {
-            return Ac_Denunciar(parcel)
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                val photoURI = FileProvider.getUriForFile(this@Ac_Denunciar,
+                        "br.com.odnumiar.vigilantesdacidade",//"com.example.android.fileprovider",
+                        photoFile)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, TIRAR_FOTO)
+            }
         }
 
-        override fun newArray(size: Int): Array<Ac_Denunciar?> {
-            return arrayOfNulls(size)
-        }
     }
 
 }
