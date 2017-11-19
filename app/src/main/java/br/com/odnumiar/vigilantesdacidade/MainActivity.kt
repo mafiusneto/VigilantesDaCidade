@@ -29,14 +29,13 @@ import br.com.odnumiar.vigilantesdacidade.views.Ac_Denunciar
 import br.com.odnumiar.vigilantesdacidade.views.Ac_Lista_Denuncias
 import br.com.odnumiar.vigilantesdacidade.views.Ac_Login
 import br.com.odnumiar.vigilantesdacidade.views.search_problems
-import com.orm.SugarRecord
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val REQUEST_IMAGE_CAPTURE = 1
     var posts = ArrayList<Posts>()
-    var adapter = AdapterPosts(this, posts){}
+    var adapter = AdapterPosts(this@MainActivity, posts){}
     //val key = "AUTh"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,11 +76,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
+
+        preenche_lista()
     }
 
     override fun onResume() {
         super.onResume()
-        preenche_lista()
+        fu_ConsultaPostagens()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        fu_ConsultaPostagens()
     }
 
     override fun onBackPressed() {
@@ -222,6 +228,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         rvLista.setHasFixedSize(true)
         rvLista.layoutManager = LinearLayoutManager(this)
 
+        //rvLista.onscr
+
         rvLista.adapter = adapter
         //var posts:List<Posts> =  SugarRecord.listAll(Posts::class.java)//ArrayList<Posts>()
         //var posts:List<Posts> = fu_ConsultaPostagens()
@@ -246,6 +254,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     adapter = AdapterPosts(applicationContext, lista){}
                     //rvLista.adapter = adapter
+
+                    rvLista.adapter = adapter
 
                     Toast.makeText(this@MainActivity,"Preenchido: "+lista.size,Toast.LENGTH_SHORT).show()
 
