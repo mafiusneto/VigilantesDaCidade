@@ -95,13 +95,13 @@ class ConnectionService {
         val service = retrofit.create(SessionConnection::class.java)
 
         var auth = service.requestPosts()
-        auth.enqueue(object : Callback(List<Posts>) {
+        auth.enqueue(object : Callback<List<Posts>> {
 
             override fun onResponse(call: Call<List<Posts>>, response: Response<List<Posts>>?) {
                 response?.let {
                     response.body()?.let {
 
-                        val result :List<Posts> =  response.body() as List<Posts> //é um Post
+                        val result :List<Posts> =  response.body() as List<Posts>
 
                         callback.onSuccess(result)
 

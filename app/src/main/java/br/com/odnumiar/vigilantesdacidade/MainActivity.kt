@@ -35,6 +35,8 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val REQUEST_IMAGE_CAPTURE = 1
+    var posts = ArrayList<Posts>()
+    var adapter = AdapterPosts(this, posts){}
     //val key = "AUTh"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -220,13 +222,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         rvLista.setHasFixedSize(true)
         rvLista.layoutManager = LinearLayoutManager(this)
 
-        //var posts:List<Posts> =  SugarRecord.listAll(Posts::class.java)//ArrayList<Posts>()
-        var posts:List<Posts> = fu_ConsultaPostagens()
-
-        var adapter = AdapterPosts(this, ArrayList(posts)){
-        }
-
         rvLista.adapter = adapter
+        //var posts:List<Posts> =  SugarRecord.listAll(Posts::class.java)//ArrayList<Posts>()
+        //var posts:List<Posts> = fu_ConsultaPostagens()
+        //posts =  ArrayList<Posts>(fu_ConsultaPostagens())
+        fu_ConsultaPostagens()
+
+        //var adapter = AdapterPosts(this, ArrayList(posts)){ }
+        //rvLista.adapter = adapter
     }
 
     fun fu_ConsultaPostagens():List<Posts>{
@@ -238,28 +241,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         conn.requestPosts (GlobalParam.vUserId, this@MainActivity,
             object : AsyncCallback() {
                 override fun onSuccess(result:List<Posts>){
+                    //Toast.makeText(this@MainActivity,result,Toast.LENGTH_SHORT).show()
                     lista = ArrayList<Posts>(result)
-                    /*
-                    GlobalParam.vUserToken = ""
-                    GlobalParam.vUserId = result.id
-                    GlobalParam.vUserName= result.name
-                    GlobalParam.vUserToken = result.token
 
-                    Toast.makeText(this@Ac_Denunciar, GlobalParam.vUserToken, Toast.LENGTH_SHORT).show()
+                    adapter = AdapterPosts(applicationContext, lista){}
+                    //rvLista.adapter = adapter
 
-                    if (ckbManterConectado.isChecked){
-                        var funcao = Funcoes()
-                        funcao.SetPref(Constants.USER_TOKEN,GlobalParam.vUserToken,this@Ac_Login)
-                        funcao.SetPref(Constants.USER_NAME,GlobalParam.vUserName,this@Ac_Login)
-                        funcao.SetPref(Constants.USER_ID,GlobalParam.vUserId.toString(),this@Ac_Login)
-                    }
+                    Toast.makeText(this@MainActivity,"Preenchido: "+lista.size,Toast.LENGTH_SHORT).show()
 
-                    val intent = Intent(this@Ac_Denunciar, ::class.java)
-                    startActivity(intent)
-                    finish()
-                    */
-                    //Toast.makeText(this@Ac_Denunciar,"resulto:"+result,Toast.LENGTH_SHORT).show()
-                    //hideProgressDialog()
                 }
 
                 override fun onFailure(result: String) {
