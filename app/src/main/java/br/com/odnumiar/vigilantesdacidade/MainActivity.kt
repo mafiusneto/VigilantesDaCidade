@@ -2,6 +2,7 @@ package br.com.odnumiar.vigilantesdacidade
 
 import android.Manifest
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -22,9 +23,7 @@ import br.com.odnumiar.vigilantesdacidade.adapters.AdapterPosts
 import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
 import br.com.odnumiar.vigilantesdacidade.mvp.ConnectionService
 import br.com.odnumiar.vigilantesdacidade.orm.Posts
-import br.com.odnumiar.vigilantesdacidade.util.Constants
-import br.com.odnumiar.vigilantesdacidade.util.Funcoes
-import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
+import br.com.odnumiar.vigilantesdacidade.util.*
 import br.com.odnumiar.vigilantesdacidade.views.Ac_Denunciar
 import br.com.odnumiar.vigilantesdacidade.views.Ac_Lista_Denuncias
 import br.com.odnumiar.vigilantesdacidade.views.Ac_Login
@@ -36,11 +35,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val REQUEST_IMAGE_CAPTURE = 1
     var posts = ArrayList<Posts>()
     var adapter = AdapterPosts(this@MainActivity, posts){}
+    var br = ConnReceiver()
     //val key = "AUTh"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        registerReceiver(br,
+                IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -80,6 +83,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         preenche_lista()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(br)
+    }
+    
     override fun onResume() {
         super.onResume()
         fu_ConsultaPostagens()
@@ -257,7 +265,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     rvLista.adapter = adapter
 
-                    Toast.makeText(this@MainActivity,"Preenchido: "+lista.size,Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@MainActivity,"Preenchido: "+lista.size,Toast.LENGTH_SHORT).show()
 
                 }
 
