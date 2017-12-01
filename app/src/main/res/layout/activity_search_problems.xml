@@ -30,4 +30,12 @@
         android:onClick="TesteClick"
         android:text="Teste" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="pr_busca_local_proximo"
+        android:text="Denúncias proximas" />
+
+
+
 </LinearLayout>

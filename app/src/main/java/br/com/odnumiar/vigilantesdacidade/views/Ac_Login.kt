@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.IntentFilter
 import android.preference.PreferenceManager
 import android.widget.*
 import br.com.odnumiar.vigilantesdacidade.MainActivity
@@ -13,8 +14,7 @@ import br.com.odnumiar.vigilantesdacidade.util.Constants
 import br.com.odnumiar.vigilantesdacidade.models.AsyncCallback
 import br.com.odnumiar.vigilantesdacidade.models.User
 import br.com.odnumiar.vigilantesdacidade.mvp.ConnectionService
-import br.com.odnumiar.vigilantesdacidade.util.Funcoes
-import br.com.odnumiar.vigilantesdacidade.util.GlobalParam
+import br.com.odnumiar.vigilantesdacidade.util.*
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 class Ac_Login : AppCompatActivity(){
 
     val progress: ProgressDialog by lazy { ProgressDialog(this) }
+    var br = ConnReceiver()
 
     // UI references.
     private var mEmailView: AutoCompleteTextView? = null
@@ -34,9 +35,16 @@ class Ac_Login : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         // Set up the login form.
+        registerReceiver(br,
+                IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
 
         etEmail.setText("netolbv@gmail.com")
         etPassword.setText("a123")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(br)
     }
 
     fun fu_logar(v:View){
@@ -89,16 +97,6 @@ class Ac_Login : AppCompatActivity(){
 
         }
 
-        /*
-        if (etEmail.text.toString() == "123" && etPassword.text.toString() == "123") {
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
-            finish()
-
-        }else{
-            Toast.makeText(this@Ac_Login,"Autenticação inválida!",Toast.LENGTH_SHORT).show()
-        }
-        */
     }
 
     fun fu_cadastro(v:View){
@@ -116,23 +114,6 @@ class Ac_Login : AppCompatActivity(){
 
     fun hideProgressDialog() {
         progress.dismiss()
-    }
-
-    fun SetPrefToken(v :String){
-        var pref = PreferenceManager.getDefaultSharedPreferences(this)
-        var editor = pref.edit()
-
-        //save infos
-        editor.putString(
-                Constants.KEY_LOGIN,v)
-        editor.commit()
-
-        Toast.makeText(this@Ac_Login, "Login OK", Toast.LENGTH_SHORT).show()
-    }
-
-
-
-    fun Save_SP(v:View) {
     }
 
 }

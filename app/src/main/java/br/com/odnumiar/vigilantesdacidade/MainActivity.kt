@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onDestroy()
         unregisterReceiver(br)
     }
-    
+
     override fun onResume() {
         super.onResume()
         fu_ConsultaPostagens()

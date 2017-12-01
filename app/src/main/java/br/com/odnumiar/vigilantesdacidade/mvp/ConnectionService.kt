@@ -124,6 +124,46 @@ class ConnectionService {
 
     }
 
+    fun requestPosts2(lat:String, lon:String,  context: Context, callback: AsyncCallback){
+        var URL :String = Constants.URL_ROOt
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        val service = retrofit.create(SessionConnection::class.java)
+
+        var auth = service.requestPosts2(lat,lon)
+        auth.enqueue(object : Callback<List<Posts>> {
+
+            override fun onResponse(call: Call<List<Posts>>, response: Response<List<Posts>>?) {
+                response?.let {
+                    response.body()?.let {
+
+                        val result :List<Posts> =  response.body() as List<Posts>
+
+                        callback.onSuccess(result)
+
+                    } ?: run {
+                        callback.onFailure("Erro 1")
+                        //mainPresenter.result(context.getString(R.string.error))
+                    }
+                } ?: run {
+                    //mainPresenter.result(context.getString(R.string.error))
+                    callback.onFailure("Erro 2")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Posts>>, t: Throwable) {
+                //.result(context.getString(R.string.error))
+
+                callback.onFailure("Erro 3")
+            }
+        })
+
+    }
+
 
     fun requestLogin(user:User, context: Context, callback: AsyncCallback) {
         var URL :String = Constants.URL_ROOt

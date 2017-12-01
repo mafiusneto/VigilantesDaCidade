@@ -1,5 +1,6 @@
 package br.com.odnumiar.vigilantesdacidade.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -44,5 +45,10 @@ class search_problems : AppCompatActivity() {
 
     fun TesteClick(v: View){
         Toast.makeText(this@search_problems,"Teste msg:${spStates.selectedItem}", Toast.LENGTH_SHORT).show()
+    }
+
+    fun pr_busca_local_proximo(v: View){
+        val intent = Intent(this@search_problems, Ac_MapsActivity::class.java)
+        startActivity(intent)
     }
 }

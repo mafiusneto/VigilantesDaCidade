@@ -23,6 +23,9 @@ interface SessionConnection {
     @GET("posts.php/")
     fun requestPosts(): Call<List<Posts>>
 
+    @GET("posts.php/") //{lat}{lon}
+    fun requestPosts2(@Query("lat") lat :String,@Query ("lon") lon:String): Call<List<Posts>> //@Path("lat")lat:Double, @Path("lon")lon:Double
+
     @POST("posts.php/")
     @Multipart
     fun sendNewPost( @Part image2 :MultipartBody.Part, @Part("posts") post:Posts): Call<Posts> //, @Part("image2") image2:MultipartBody.Part

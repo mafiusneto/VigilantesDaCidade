@@ -78,7 +78,7 @@ class Funcoes {
         // Get the location manager
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
-        val bestProvider = locationManager.getBestProvider(criteria, false)
+        val bestProvider = locationManager.getBestProvider(criteria, true)
         val location = locationManager.getLastKnownLocation(bestProvider)
         //val lat: Double?
         //val lon: Double?
