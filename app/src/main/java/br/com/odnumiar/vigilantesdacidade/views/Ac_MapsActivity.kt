@@ -70,7 +70,7 @@ class Ac_MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         val local = LatLng(post.lat, post.long)
-        mMap.addMarker(MarkerOptions().position(local).title("Meu Local"))//.snippet(coord.lat.toString())
+        mMap.addMarker(MarkerOptions().position(local).title(post.description.toString()))//.snippet(coord.lat.toString())
         mMap.moveCamera(CameraUpdateFactory.newLatLng(local))
     }
 
