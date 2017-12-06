@@ -1,24 +1,19 @@
 package br.com.odnumiar.vigilantesdacidade.util
 
+import android.app.Activity
 import android.content.Context
 import android.preference.PreferenceManager
 import android.widget.Toast
-import android.graphics.Bitmap
-import android.util.Log
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-import android.graphics.BitmapFactory
-import android.location.Criteria
-import android.location.LocationManager
 import br.com.odnumiar.vigilantesdacidade.models.Coordenadas
-import java.io.FileInputStream
+import br.com.odnumiar.vigilantesdacidade.util.Location.*
 
 
 /**
  * Created by Neto on 29/10/2017.
  */
 class Funcoes {
+
+    private var currentlocation: CurrentLatLong? = null
 
     fun SetPref(key:String, value :String, context:Context){
         var pref = PreferenceManager.getDefaultSharedPreferences(context)
@@ -74,15 +69,31 @@ class Funcoes {
         return b
     }
     */
-    fun getLocation(context:Context): Coordenadas { //: LatLng?
+    fun getLocation(context:Context, activity:Activity): Coordenadas { //: LatLng?
+        var coordenada = Coordenadas(0.0,0.0,0)
+
+        currentlocation = CurrentLatLong()
+        var status: Int? = currentlocation?.currentlatlong(activity)
+
+        if (status == 1) {
+            var lat:String = currentlocation?.currentLat.toString()
+            var lng:String = currentlocation?.currentLong.toString()
+
+            coordenada.lat = lat.toDouble()
+            coordenada.long = lng.toDouble()
+            coordenada.ativo = 1
+            //tvLocationCurrent.text = "Localização atual:"
+            //tvResultLatLong?.text = "Latitude: " + currentlocation?.currentLat + "\n" + "Longitude: " + currentlocation?.currentLong
+        } else {
+            Toast.makeText(context, "Localização não obtida! Verifique sua conexão e GPS.", Toast.LENGTH_LONG).show()
+        }
+        /*
         // Get the location manager
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
         val bestProvider = locationManager.getBestProvider(criteria, true)
         val location = locationManager.getLastKnownLocation(bestProvider)
-        //val lat: Double?
-        //val lon: Double?
-        var coordenada = Coordenadas(0.0,0.0,0)
+
         try {
             coordenada.lat = location.latitude
             coordenada.long = location.longitude
@@ -94,6 +105,7 @@ class Funcoes {
             e.printStackTrace()
             //return null
         }
+        */
 
         return coordenada
     }

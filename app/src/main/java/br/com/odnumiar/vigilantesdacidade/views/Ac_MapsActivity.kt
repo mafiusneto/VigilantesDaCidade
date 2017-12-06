@@ -30,7 +30,7 @@ class Ac_MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ac__maps)
 
-        coord = funcao.getLocation(this@Ac_MapsActivity)
+        coord = funcao.getLocation(this@Ac_MapsActivity, this)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager

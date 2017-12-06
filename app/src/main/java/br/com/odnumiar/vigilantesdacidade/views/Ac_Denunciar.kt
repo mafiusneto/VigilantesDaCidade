@@ -79,7 +79,7 @@ class Ac_Denunciar() : AppCompatActivity(){
             try {
                 // Request location updates
                 //locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
-                coord = func.getLocation(this@Ac_Denunciar) //getLocation()
+                coord = func.getLocation(this@Ac_Denunciar, this) //getLocation()
                 //msg = "latitude:"+coord.lat.toString() + "| Logitude: "+coord.long.toString()
             } catch(ex: SecurityException) {
                 Log.d(Constants.MYTAG, "Security Exception, no location available")
